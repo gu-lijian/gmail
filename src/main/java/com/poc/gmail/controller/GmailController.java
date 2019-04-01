@@ -1,4 +1,4 @@
-package com.dbs.gmail.controller;
+package com.poc.gmail.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dbs.gmail.action.GmailRegistrationAction;
+import com.poc.gmail.action.GmailRegistrationAction;
 
 @Controller
 public class GmailController {

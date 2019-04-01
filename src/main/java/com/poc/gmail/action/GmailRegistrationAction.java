@@ -1,4 +1,4 @@
-package com.dbs.gmail.action;
+package com.poc.gmail.action;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,9 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.ListThreadsResponse;
+import com.google.api.services.gmail.model.Message;
 
 @Component
 public class GmailRegistrationAction {
@@ -93,14 +95,36 @@ public class GmailRegistrationAction {
               break;
             }
         }
-        System.out.println();
+        System.out.println("Start to print threads info");
         for(com.google.api.services.gmail.model.Thread thread : threads) {
-//        	System.out.println(thread.toPrettyString());
-        	System.out.printf("- %s\n", thread.getSnippet());
+        	System.out.println(thread.toPrettyString());
+//        	System.out.printf("- %s\n", thread.getSnippet());
+//        	System.out.printf("- %s\n", thread.getMessages());
           }
-        
         System.out.println("Total related e-commence threads count is: " + threads.size());
-        
+        System.out.println("Completed printing threads info");
+        System.out.println();
+
+        ListMessagesResponse response = service.users().messages().list(user).setQ(query).execute();
+            List<Message> messages = new ArrayList<Message>();
+            while (response.getMessages() != null) {
+              messages.addAll(response.getMessages());
+              if (response.getNextPageToken() != null) {
+                String pageToken = response.getNextPageToken();
+                response = service.users().messages().list(user).setPageToken(pageToken).execute();
+              } else {
+                break;
+              }
+            }
+            
+            System.out.println("Start to print messages info");
+            for (Message message : messages) {
+//              System.out.println(message.toPrettyString());
+            	System.out.println(message.getId());
+            }
+            System.out.println("Total related e-commence messages count is: " + messages.size());
+            System.out.println("Completed printing threads info");
+            
 //        if (threads.isEmpty()) {
 //            System.out.println("No threads found.");
 //        } else {
